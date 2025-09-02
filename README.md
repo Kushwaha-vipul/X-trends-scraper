@@ -90,12 +90,14 @@ npm install
 Thank you for reviewing my project!
 
 
+#output ScreenShot
 
-<img width="1471" height="470" alt="Screenshot 2025-09-02 100742" src="https://github.com/user-attachments/assets/40c9b531-bd7c-47ee-a575-f3b597040262" />
-<img width="1902" height="929" alt="Screenshot 2025-09-03 000928" src="https://github.com/user-attachments/assets/7ec086fb-5b16-4df6-985a-9e4bead82ef1" />
+<img width="1902" height="929" alt="Screenshot 2025-09-03 000928" src="https://github.com/user-attachments/assets/92397bdb-447f-476c-b760-cfef4bd00b62" />
 
-<img width="1879" height="953" alt="Screenshot 2025-09-03 003052" src="https://github.com/user-attachments/assets/45355446-4571-474a-8c9d-13107dc9ddde" />
+<img width="1891" height="909" alt="Screenshot 2025-09-03 014049" src="https://github.com/user-attachments/assets/540e7603-9dd7-4c3b-81ff-df175a39da9c" />
 
+<img width="1058" height="929" alt="Screenshot 2025-09-03 014424" src="https://github.com/user-attachments/assets/4fdbb74f-3ad3-48f2-816f-891fec89c024" />
 
+<img width="1001" height="905" alt="Screenshot 2025-09-03 014452" src="https://github.com/user-attachments/assets/1981f9a2-4d8f-4910-8ce9-ee106c98e49c" />
 
- 
+<img width="1879" height="950" alt="Screenshot 2025-09-03 003014" src="https://github.com/user-attachments/assets/cc6f5578-2a3c-4875-80ad-d63ece62a5a2" />
