@@ -36,7 +36,7 @@ if sys.platform == "win32":
         options=edge_options
     )
 else:
-    # Linux (production/server) environment - Headless Chrome with proxy and explicit paths
+    # Linux (production/server) environment - Headless Chrome with proxy and explicit paths (correct Service init!)
     chrome_options = ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
@@ -46,9 +46,9 @@ else:
     chrome_options.binary_location = CHROME_BIN
     chrome_service = ChromeService(executable_path=CHROMEDRIVER_PATH)
     driver = webdriver.Chrome(
-        seleniumwire_options=proxy_options,
         service=chrome_service,
-        options=chrome_options
+        options=chrome_options,
+        seleniumwire_options=proxy_options
     )
 
 wait = WebDriverWait(driver, 20)
@@ -96,8 +96,8 @@ try:
     let elements = document.querySelectorAll('div[data-testid="cellInnerDiv"]');
     let texts = [];
     elements.forEach(el => {
-        if (el.innerText.trim() !== '') {
-            texts.push(el.innerText.trim());
+        if (el.innerText.trim() != '') {
+            texts.append(el.innerText.trim());
         }
     });
     return texts;
