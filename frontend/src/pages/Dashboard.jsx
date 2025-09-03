@@ -5,6 +5,7 @@ import TrendCard from "../components/TrendCard";
 export default function Dashboard() {
   const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [scraperLoading, setScraperLoading] = useState(false);
   const [lastRun, setLastRun] = useState(null);
   const [ip, setIp] = useState("");
 
@@ -34,16 +35,36 @@ export default function Dashboard() {
   setLoading(false);
 };
 
+  const handleRunScraper = async () => {
+    setScraperLoading(true);
+    try {
+      const data = await runScraper();
+      alert(data.message || "Scraper started!");
+    } catch (err) {
+      alert("Failed to start scraper");
+      console.error(err);
+    }
+    setScraperLoading(false);
+  };
 
   return (
     <div className="p-6">
-      <button
-        onClick={handleFetch}
-        disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700"
-      >
-        {loading ? "Fetching..." : "Fetch Latest Trends"}
-      </button>
+      <div className="flex flex-row gap-4">
+        <button
+          onClick={handleFetch}
+          disabled={loading}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700"
+        >
+          {loading ? "Fetching..." : "Fetch Latest Trends"}
+        </button>
+        <button
+          onClick={handleRunScraper}
+          disabled={scraperLoading}
+          className="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700"
+        >
+          {scraperLoading ? "Running..." : "Run Selenium Script"}
+        </button>
+      </div>
 
       {lastRun && (
         <div className="mt-4 text-gray-600">

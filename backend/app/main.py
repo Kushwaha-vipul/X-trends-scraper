@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import trendrun
+from app.routers import trendrun , scraper
 from app.database import engine, create_db_and_tables
 
 
@@ -22,3 +22,4 @@ app.add_middleware(
 )
 
 app.include_router(trendrun.router)
+app.include_router(scraper.router)

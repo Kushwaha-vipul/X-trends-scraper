@@ -121,7 +121,7 @@ try:
     response = requests.post("http://localhost:8000/api/trends/", json=data)
     print(f"Data sent to backend, response status: {response.status_code}")
 
-    time.sleep(20)
+    time.sleep(50)
 
 finally:
     driver.quit()

@@ -1,4 +1,5 @@
-const API_BASE = "http://127.0.0.1:8000/api";  
+const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+
 
 export async function fetchTrends() {
   const response = await fetch(`${API_BASE}/trends/`);
@@ -7,7 +8,7 @@ export async function fetchTrends() {
 }
 
 export async function runScraper() {
-  const response = await fetch(`${API_BASE}/trends/`, {
+  const response = await fetch(`${API_BASE}/scraper/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({}) 
@@ -15,3 +16,4 @@ export async function runScraper() {
   if (!response.ok) throw new Error("Failed to run scraper");
   return response.json();
 }
+
