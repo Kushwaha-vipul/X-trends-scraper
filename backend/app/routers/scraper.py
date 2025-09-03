@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 import os
+import sys
 import subprocess
 
 router = APIRouter(
@@ -9,9 +10,11 @@ router = APIRouter(
 
 @router.post("/")
 def run_scraper():
-    """
-    Endpoint to trigger scraper.py script asynchronously using virtualenv python
-    """
-    venv_python = os.path.join(os.getcwd(), ".venv", "Scripts", "python.exe")  
-    subprocess.Popen([venv_python, "app/scraper.py"])
+    venv_path = os.path.join(os.getcwd(), ".venv")
+    if sys.platform == "win32":
+        python_executable = os.path.join(venv_path, "Scripts", "python.exe")
+    else:
+        python_executable = os.path.join(venv_path, "bin", "python")
+
+    subprocess.Popen([python_executable, "app/scraper.py"])
     return {"message": "Scraper started successfully"}
