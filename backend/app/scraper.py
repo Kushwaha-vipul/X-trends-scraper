@@ -4,6 +4,7 @@ from seleniumwire import webdriver
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -26,8 +27,6 @@ proxy_options = {
 
 if sys.platform == "win32":
     # Windows environment - Edge driver with proxy
-    from selenium.webdriver.edge.service import Service as EdgeService
-    from selenium.webdriver.edge.options import Options as EdgeOptions
     edge_options = EdgeOptions()
     driver_path = r"C:\Users\Vipul\Downloads\edgedriver_win64\msedgedriver.exe"
     service = EdgeService(executable_path=driver_path)
@@ -38,7 +37,6 @@ if sys.platform == "win32":
     )
 else:
     # Linux (production/server) environment - Headless Chrome with proxy and explicit paths
-    from selenium.webdriver.chrome.options import Options as ChromeOptions
     chrome_options = ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
@@ -46,9 +44,10 @@ else:
     CHROME_BIN = os.getenv("GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
     CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
     chrome_options.binary_location = CHROME_BIN
+    chrome_service = ChromeService(executable_path=CHROMEDRIVER_PATH)
     driver = webdriver.Chrome(
         seleniumwire_options=proxy_options,
-        executable_path=CHROMEDRIVER_PATH,
+        service=chrome_service,
         options=chrome_options
     )
 
