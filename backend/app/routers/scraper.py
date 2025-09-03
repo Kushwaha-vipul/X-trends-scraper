@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter
 import os
 import subprocess
 
@@ -8,12 +8,10 @@ router = APIRouter(
 )
 
 @router.post("/")
-def run_scraper(response: Response):
-    venv_python = os.path.join(os.getcwd(), ".venv", "Scripts", "python.exe")  # Windows ke liye
+def run_scraper():
+    """
+    Endpoint to trigger scraper.py script asynchronously using virtualenv python
+    """
+    venv_python = os.path.join(os.getcwd(), ".venv", "Scripts", "python.exe")  
     subprocess.Popen([venv_python, "app/scraper.py"])
-
-    # Explicit CORS header add karo
-    response.headers["Access-Control-Allow-Origin"] = "*"
-
     return {"message": "Scraper started successfully"}
-
