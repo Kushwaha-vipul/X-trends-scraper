@@ -1,2 +1,5 @@
 [phases.setup]
-nixPkgs = ["google-chrome", "chromedriver"]
+aptPkgs = [
+    "google-chrome-stable",
+    "chromium-driver"
+]
