@@ -16,6 +16,8 @@ from selenium.common.exceptions import TimeoutException
 
 
 # ✅ Automatically install chromedriver that matches installed Chrome/Chromium
+os.environ["GOOGLE_CHROME_BIN"] = "/usr/bin/chromium"
+os.environ["CHROMEDRIVER_PATH"] = "/usr/bin/chromedriver"
 chromedriver_autoinstaller.install()
 # Debug: Verify installed versions at runtime
 import seleniumwire
@@ -75,8 +77,8 @@ else:
     print("\n=== DEBUG: Listing /usr/lib ===")
     os.system("ls -l /usr/lib | grep chrom || true")
 
-    chrome_options.binary_location = CHROME_BIN
-    chrome_service = ChromeService(executable_path=CHROMEDRIVER_PATH)
+    chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN", "/usr/bin/chromium")
+    chrome_service = ChromeService(executable_path=os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver"))
 
     driver = webdriver.Chrome(
         service=chrome_service,
