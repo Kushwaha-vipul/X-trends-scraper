@@ -8,6 +8,10 @@ A full-stack application that automatically scrapes the top 5 trending topics fr
 
 ---
 
+## Deployed Platform 
+Frontend on Netlify :https://x-trends-frontend.netlify.app/
+Beackend on Railway : https://railway.com/project/a9144e7e-85d6-4ec0-a3fb-9d8ea7ef2455?environmentId=f4edeef1-209c-4943-951b-b4a91c534eae
+
 ## Features
 
 - **Automated scraping:** Logs in to X with multi-step authentication handling (username, email challenge, password, verify email) using Selenium.
