@@ -3,7 +3,7 @@ import os
 import time
 import requests
 import datetime
-
+import chromedriver_autoinstaller  # ✅ add this
 from seleniumwire import webdriver
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
@@ -14,6 +14,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+
+# ✅ Automatically install chromedriver that matches installed Chrome/Chromium
+chromedriver_autoinstaller.install()
 # Debug: Verify installed versions at runtime
 import seleniumwire
 import selenium
