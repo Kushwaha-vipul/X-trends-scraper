@@ -4,87 +4,36 @@ import time
 import requests
 import datetime
 
-from seleniumwire import webdriver
-from selenium.webdriver.edge.service import Service as EdgeService
-from selenium.webdriver.edge.options import Options as EdgeOptions
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+# Browserless.io API Key (set env var in Railway)
+BROWSERLESS_KEY = os.getenv("BROWSERLESS_API_KEY")
+BROWSERLESS_URL = f"wss://chrome.browserless.io?token={BROWSERLESS_KEY}"
 
-# ✅ Automatically install chromedriver that matches installed Chrome/Chromium
-os.environ["GOOGLE_CHROME_BIN"] = "/usr/bin/chromium"
-os.environ["CHROMEDRIVER_PATH"] = "/usr/bin/chromedriver"
-
-# Debug: Verify installed versions at runtime
-import seleniumwire
-import selenium
-print("SELENIUMWIRE VERSION:", seleniumwire.__version__)
-print("SELENIUM VERSION:", selenium.__version__)
-
-# Backend API URL env var se lo; default local server
+# Backend API URL
 BACKEND_API_URL = os.getenv("BACKEND_API_URL", "http://localhost:8000/api/trends/")
 
-# Proxy configuration
-proxy_options = {
-    'proxy': {
-        'http': 'http://vipul44:vipul123@us-ca.proxymesh.com:31280',
-        'https': 'http://vipul44:vipul123@us-ca.proxymesh.com:31280',
-        'no_proxy': 'localhost,127.0.0.1'
-    }
-}
+# ✅ ProxyMesh configuration
+PROXY = "http://vipul44:vipul123@us-ca.proxymesh.com:31280"
 
-if sys.platform == "win32":
-    # Windows Edge driver with proxy
-    edge_options = EdgeOptions()
-    driver_path = r"C:\Users\Vipul\Downloads\edgedriver_win64\msedgedriver.exe"
-    edge_service = EdgeService(executable_path=driver_path)
-    driver = webdriver.Edge(
-        seleniumwire_options=proxy_options,
-        service=edge_service,
-        options=edge_options
-    )
-else:
-    # Linux production - Headless Chrome with proxy
-    chrome_options = ChromeOptions()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
+# Chrome options
+options = Options()
+options.add_argument("--disable-gpu")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--headless=new")
+options.add_argument(f"--proxy-server={PROXY}")  # 👈 ProxyMesh enabled
 
-    # Environment variables set by Railway / nixpacks
-    CHROME_BIN = os.getenv("GOOGLE_CHROME_BIN", "/usr/bin/chromium")
-    CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
-
-    # Debug: print chrome paths for verification
-    print(f"Chrome binary path: {CHROME_BIN}")
-    print(f"Chromedriver path: {CHROMEDRIVER_PATH}")
-    print("Chrome binary exists:", os.path.exists(CHROME_BIN))
-    print("Chromedriver exists:", os.path.exists(CHROMEDRIVER_PATH))
-
-    # 🔹 Extra Debug: find real installation path
-    print("\n=== DEBUG: Checking chromium installation ===")
-    os.system("which chromium || true")
-    os.system("which chromium-browser || true")
-    os.system("which google-chrome || true")
-    os.system("which chromedriver || true")
-
-    print("\n=== DEBUG: Listing /usr/bin ===")
-    os.system("ls -l /usr/bin | grep chrom || true")
-
-    print("\n=== DEBUG: Listing /usr/lib ===")
-    os.system("ls -l /usr/lib | grep chrom || true")
-
-    chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN", "/usr/bin/chromium")
-    chrome_service = ChromeService(executable_path=os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver"))
-
-    driver = webdriver.Chrome(
-        service=chrome_service,
-        options=chrome_options,
-        seleniumwire_options=proxy_options
-    )
+# Remote WebDriver (Browserless.io)
+driver = webdriver.Remote(
+    command_executor=BROWSERLESS_URL,
+    options=options
+)
 
 wait = WebDriverWait(driver, 20)
 
@@ -169,7 +118,7 @@ try:
     response = requests.post(BACKEND_API_URL, json=data)
     print(f"Data sent to backend, response status: {response.status_code}")
 
-    time.sleep(50)
+    time.sleep(20)
 
 finally:
     driver.quit()
