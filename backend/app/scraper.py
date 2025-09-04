@@ -1,42 +1,30 @@
-import sys
-import os
-import time
-import requests
-import datetime
-from dotenv import load_dotenv
-
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+agar local selniium bola h to mere paas pejle se hi cod eh isk "from seleniumwire import webdriver
+from selenium.webdriver.edge.service import Service
+from selenium.webdriver.edge.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+import time
+import requests
+import datetime
 
-# ✅ Load .env file
-load_dotenv()
+edge_options = Options()
+driver_path = r"C:\Users\Vipul\Downloads\edgedriver_win64\msedgedriver.exe"
 
-# Browserless.io API Key (set env var in Railway / .env)
-BROWSERLESS_KEY = os.getenv("BROWSERLESS_API_KEY")
-BROWSERLESS_URL = f"https://production-sfo.browserless.io/webdriver?token={BROWSERLESS_KEY}"
+proxy_options = {
+    'proxy': {
+        'http': 'http://vipul44:vipul123@us-ca.proxymesh.com:31280',
+        'https': 'http://vipul44:vipul123@us-ca.proxymesh.com:31280',
+        'no_proxy': 'localhost,127.0.0.1'
+    }
+}
 
-# Backend API URL
-BACKEND_API_URL = os.getenv("BACKEND_API_URL", "http://localhost:8000/api/trends/")
-
-# ✅ ProxyMesh configuration
-PROXY = "http://vipul44:vipul123@us-ca.proxymesh.com:31280"
-
-# Chrome options
-options = Options()
-options.add_argument("--disable-gpu")
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--headless=new")
-options.add_argument(f"--proxy-server={PROXY}")  # 👈 ProxyMesh enabled
-
-# Remote WebDriver (Browserless.io)
-driver = webdriver.Remote(
-    command_executor=BROWSERLESS_URL,
-    options=options
+service = Service(executable_path=driver_path)
+driver = webdriver.Edge(
+    seleniumwire_options=proxy_options,
+    options=edge_options,
+    service=service
 )
 
 wait = WebDriverWait(driver, 20)
@@ -46,62 +34,73 @@ try:
     print("Opened Twitter login page")
     time.sleep(2)
 
+   
     username_input = wait.until(EC.element_to_be_clickable((By.NAME, "text")))
     username_input.send_keys("@ScraperX45479")
+    
     time.sleep(2)
-
     next_btn = wait.until(EC.element_to_be_clickable(
         (By.XPATH, '//span[text()="Next"]/ancestor::button[@role="button"]')
     ))
     next_btn.click()
+    
     time.sleep(2)
 
+    
     try:
         email_input = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'input[name="text"]')))
         email_input.clear()
         email_input.send_keys("vipulkushwaha.2021@gmail.com")
-
+        
+        
         email_next_btn = wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//span[text()="Next"]/ancestor::button[@role="button"]')
         ))
         email_next_btn.click()
+        
     except TimeoutException:
         print("No first email challenge detected, continuing...")
 
+    
     password_input = wait.until(EC.element_to_be_clickable((By.NAME, "password")))
     password_input.send_keys("Vipul@321")
-
+   
     login_btn = wait.until(EC.element_to_be_clickable(
         (By.XPATH, '//span[text()="Log in"]/ancestor::button[@role="button"]')
     ))
     login_btn.click()
+    
 
+    
     try:
         verify_email_input = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'input[name="text"]')))
         verify_email_input.clear()
         verify_email_input.send_keys("vipulkushwaha.2021@gmail.com")
-
+        
         verify_email_next_btn = wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//span[text()="Next"]/ancestor::button[@role="button"]')
         ))
         verify_email_next_btn.click()
+        
     except TimeoutException:
         print("No verify email step detected, moving on.")
 
+    
     wait.until(EC.url_contains("/home"))
+    
+
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-testid="cellInnerDiv"]')))
 
     script = """
     let elements = document.querySelectorAll('div[data-testid="cellInnerDiv"]');
     let texts = [];
     elements.forEach(el => {
-        if (el.innerText.trim() != '') {
+        if (el.innerText.trim() !== '') {
             texts.push(el.innerText.trim());
         }
     });
     return texts;
     """
-
     trends = driver.execute_script(script)
     top_trends = trends[:5]
 
@@ -119,11 +118,12 @@ try:
         "ip_address": requests.get("https://api.ipify.org").text,
     }
 
-    response = requests.post(BACKEND_API_URL, json=data)
+    response = requests.post("http://localhost:8000/api/trends/", json=data)
     print(f"Data sent to backend, response status: {response.status_code}")
 
-    time.sleep(20)
+    time.sleep(50)
 
 finally:
     driver.quit()
     print("Closed browser")
+"
