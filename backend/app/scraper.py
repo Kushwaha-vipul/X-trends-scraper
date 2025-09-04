@@ -13,7 +13,7 @@ from selenium.common.exceptions import TimeoutException
 
 # Browserless.io API Key (set env var in Railway)
 BROWSERLESS_KEY = os.getenv("BROWSERLESS_API_KEY")
-BROWSERLESS_URL = f"https://chrome.browserless.io/webdriver?token={BROWSERLESS_KEY}"  # 👈 fixed endpoint
+BROWSERLESS_URL = f"wss://production-sfo.browserless.io/webdriver?token={BROWSERLESS_KEY}"
 
 # Backend API URL
 BACKEND_API_URL = os.getenv("BACKEND_API_URL", "http://localhost:8000/api/trends/")
