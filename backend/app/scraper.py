@@ -3,6 +3,7 @@ import os
 import time
 import requests
 import datetime
+from dotenv import load_dotenv
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -11,9 +12,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-# Browserless.io API Key (set env var in Railway)
+# ✅ Load .env file
+load_dotenv()
+
+# Browserless.io API Key (set env var in Railway / .env)
 BROWSERLESS_KEY = os.getenv("BROWSERLESS_API_KEY")
-BROWSERLESS_URL = f"wss://production-sfo.browserless.io/webdriver?token={BROWSERLESS_KEY}"
+BROWSERLESS_URL = f"https://production-sfo.browserless.io/webdriver?token={BROWSERLESS_KEY}"
 
 # Backend API URL
 BACKEND_API_URL = os.getenv("BACKEND_API_URL", "http://localhost:8000/api/trends/")
