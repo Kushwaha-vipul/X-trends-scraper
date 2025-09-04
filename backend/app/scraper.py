@@ -13,10 +13,14 @@ import time
 import requests
 import datetime
 
-# Backend API URL environment variable se lo, default local address rakho
+# Runtime version check (DO NOT REMOVE - logs me VERSION dikhega!)
+import seleniumwire
+import selenium
+print("SELENIUMWIRE VERSION:", seleniumwire.__version__)
+print("SELENIUM VERSION:", selenium.__version__)
+
 BACKEND_API_URL = os.getenv("BACKEND_API_URL", "http://localhost:8000/api/trends/")
 
-# Proxy options
 proxy_options = {
     'proxy': {
         'http': 'http://vipul44:vipul123@us-ca.proxymesh.com:31280',
@@ -26,17 +30,15 @@ proxy_options = {
 }
 
 if sys.platform == "win32":
-    # Windows environment - Edge driver with proxy
     edge_options = EdgeOptions()
     driver_path = r"C:\Users\Vipul\Downloads\edgedriver_win64\msedgedriver.exe"
-    service = EdgeService(executable_path=driver_path)
+    edge_service = EdgeService(executable_path=driver_path)
     driver = webdriver.Edge(
         seleniumwire_options=proxy_options,
-        service=service,
+        service=edge_service,
         options=edge_options
     )
 else:
-    # Linux (production/server) environment - Headless Chrome with proxy and explicit paths (correct Service init!)
     chrome_options = ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
@@ -97,7 +99,7 @@ try:
     let texts = [];
     elements.forEach(el => {
         if (el.innerText.trim() != '') {
-            texts.append(el.innerText.trim());
+            texts.push(el.innerText.trim());
         }
     });
     return texts;
@@ -116,7 +118,6 @@ try:
         "finished_at": datetime.datetime.utcnow().isoformat(),
         "ip_address": requests.get("https://api.ipify.org").text,
     }
-    # Backend ko POST karo, dynamically URL se
     response = requests.post(BACKEND_API_URL, json=data)
     print(f"Data sent to backend, response status: {response.status_code}")
     time.sleep(50)
