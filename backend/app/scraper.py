@@ -50,7 +50,7 @@ else:
     chrome_options.add_argument("--disable-dev-shm-usage")
 
     # Environment variables set by Railway / nixpacks
-    CHROME_BIN = os.getenv("GOOGLE_CHROME_BIN", "/usr/bin/google-chrome")
+    CHROME_BIN = os.getenv("GOOGLE_CHROME_BIN", "/usr/bin/chromium-browser")
     CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
 
     # Debug: print chrome paths for verification
@@ -67,6 +67,7 @@ else:
         options=chrome_options,
         seleniumwire_options=proxy_options
     )
+
 
 wait = WebDriverWait(driver, 20)
 
