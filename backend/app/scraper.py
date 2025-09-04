@@ -53,12 +53,24 @@ else:
     CHROME_BIN = os.getenv("GOOGLE_CHROME_BIN", "/usr/bin/chromium")
     CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")
 
-
     # Debug: print chrome paths for verification
     print(f"Chrome binary path: {CHROME_BIN}")
     print(f"Chromedriver path: {CHROMEDRIVER_PATH}")
     print("Chrome binary exists:", os.path.exists(CHROME_BIN))
     print("Chromedriver exists:", os.path.exists(CHROMEDRIVER_PATH))
+
+    # 🔹 Extra Debug: find real installation path
+    print("\n=== DEBUG: Checking chromium installation ===")
+    os.system("which chromium || true")
+    os.system("which chromium-browser || true")
+    os.system("which google-chrome || true")
+    os.system("which chromedriver || true")
+
+    print("\n=== DEBUG: Listing /usr/bin ===")
+    os.system("ls -l /usr/bin | grep chrom || true")
+
+    print("\n=== DEBUG: Listing /usr/lib ===")
+    os.system("ls -l /usr/lib | grep chrom || true")
 
     chrome_options.binary_location = CHROME_BIN
     chrome_service = ChromeService(executable_path=CHROMEDRIVER_PATH)
@@ -68,7 +80,6 @@ else:
         options=chrome_options,
         seleniumwire_options=proxy_options
     )
-
 
 wait = WebDriverWait(driver, 20)
 
